@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>tutorial 8</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Loading Bootstrap -->
+    <link href="css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Loading Flat UI -->
+    <link href="css/flat-ui.min.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+    <!--[if lt IE 9]>
+      <script src="js/vendor/html5shiv.js"></script>
+      <script src="js/vendor/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+        <h1>yoel html5 2d game engine programming tut 8</h1>
+		<h2>get by type</h2>
+		<hr>
+		<div class="row">
+			<div class="tile  palette palette-peter-river">
+				<p>
+				in this tutorial i will show how to get entitys by type
+			    </p>
+			</div>
+			<div class="ypart1">
+				<p>
+				</p>
+				
+				<p>
+				the finished project is in file 8)get by type
+				</p>
+				
+				<p>
+				</p>
+				<p>
+					first we will will create a few entitys<br>
+					
+				</p>
+				<pre><code class="js">
+				//game main
+				function main()
+				{
+					var test_world = new y_world("y_game");
+					yoel_engine_p.current_world = test_world;
+					yoel_engine_p.init();
+					
+					
+					//create example entity
+					var test_e = new extanded_entity(100,100,0,"");
+					
+				
+					//add it to world	
+					yoel_engine_p.current_world.add(test_e);
+					
+					<span class=" palette-alizarin" >
+					//add two more
+					for(i=0; i<=2;i++)
+					{
+						y = 100*(i+1);
+						test_e2 = new extanded_entity(100,y,0,"");
+						yoel_engine_p.current_world.add(test_e2);
+					}
+					</span>
+
+
+				
+				}
+				</code></pre>
+			</div><!--end ypart1-->
+			<div class="ypart2">
+				<p>
+				then we will create a method called move_all.
+				the method will make all entitys of type extanded_entity to move.
+				
+				</p>
+			
+				<pre><code class="js">
+				extanded_entity_p.move_all = function()
+				{
+					
+				}//end timer	
+				</code></pre>
+				<p>
+				we will also add it to update method:
+				</p>
+	
+				<pre><code class="js">
+				extanded_entity_p.update = function()
+				{
+					//do stuff when class created
+					this.init();
+					
+					<span class=" palette-alizarin" >
+					this.move_all();
+					</span >
+					
+					//call parent update func
+					y_entity_p.update.call(this); 
+
+				}//end update
+				</code></pre>
+				
+				<p>
+				we will call all entitys with type of extanded_entity
+				
+				</p>
+				
+	
+				<pre><code class="js">
+				extanded_entity_p.move_all = function()
+				{
+					<span class=" palette-alizarin" >
+					//get by type all extanded_entity instances
+					var extanded_entitys = y_entity_p.get_by_type.call(this,"extanded_entity");
+					</span >
+				}//end timer
+				</code></pre>
+				
+				
+				<p>
+				the get_by_type method returns an array of entitys.
+				the only argument it gets is type (after you pass this object).
+				type is the type of entitys you want to call.
+				</p>
+						
+				<pre><code class="js">
+				y_entity_p.get_by_type.call(this,type);
+				</code></pre>
+				<p>
+				now we will loop all the entitys returned by get by type,then we will move them<br>
+				on the x axis.
+				</p>
+				
+				<pre><code class="js">
+				extanded_entity_p.move_all = function()
+				{
+
+					//get by type all extanded_entity instances
+					var extanded_entitys = y_entity_p.get_by_type.call(this,"extanded_entity");
+					
+					//length of array of extanded_entitys
+					var extanded_entitys_len = extanded_entitys.length-1;
+					
+					//loop all extanded_entitys
+					for(var i = 0; extanded_entitys_len>=i ; i++)
+					{
+						//current extanded_entity entity in loop
+						curent_e = extanded_entitys[i];	
+						
+						//move left
+						y_entity_p.move_by.call(curent_e,0.09,0,0);
+						
+						//reset x pos
+						if(curent_e.x>300)
+						{
+							curent_e.x=0;
+						}
+					}
+					
+				}//end move_all
+				</code></pre>
+				
+			</div><!--end ypart2-->
+			<div class="ypart3"></div><!--end ypart3-->
+			<div class="ypart4"></div><!--end ypart4-->
+		</div>
+	
+    </div>
+    <!-- /.container -->
+	
+    <!-- script higlighter -->
+	
+
+    <!-- jQuery (necessary for Flat UI's JavaScript plugins) -->
+    <script src="js/vendor/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/vendor/video.js"></script>
+    <script src="js/flat-ui.min.js"></script>
+	<script>
+	///scroll to div when link is clicked
+	$( document ).ready(function() {
+	    $("yscroll").on('click', function(e) {
+
+			// prevent default anchor click behavior
+		   e.preventDefault();
+
+		   // animate
+		   $('html, body').animate({
+			   scrollTop: $(this.hash).offset().top
+			 }, 300, function(){
+	   
+			   // when done, add hash to url
+			   // (default click behaviour)
+			   window.location.hash = this.hash;
+			 });
+
+		});
+	});
+	</script>
+
+  </body>
+</html>

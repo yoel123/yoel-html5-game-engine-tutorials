@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>tutorial 1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Loading Bootstrap -->
+    <link href="css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Loading Flat UI -->
+    <link href="css/flat-ui.min.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+    <!--[if lt IE 9]>
+      <script src="js/vendor/html5shiv.js"></script>
+      <script src="js/vendor/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+        <h1>yoel html5 2d game engine programming tut 1</h1>
+		<h2>setting up and testing</h2>
+		<hr>
+		<div class="row">
+			<div class="tile  palette palette-peter-river">
+				<p>
+					these tutorials assume you already have a basic understanding of html,css,js and jquery.
+					these topics will not be covered as there are plenty of tuts that teach those topics
+					out there.
+					<br>in these tuts we will cover usge of the yoel game engine.
+				</p>
+			</div>
+			<div class="ypart1">
+				<p>
+				</p>
+				<p>
+				in this tutrial i will teach you how to set up my engine and run the most basic example.
+				a hello world of sorts.
+				</p>
+				
+				<p>
+				first thing you shod do is download the empty template from the git repository
+				</p>
+				<a href="#">link to empty game template download</a>
+				<p>
+				</p>
+				<p>
+					after download and extraction of the files, open index.html, then go to
+					game main,you shod see near the bottom of the page this:
+				</p>
+				<pre><code class="js">
+				//game main
+				function main()
+				{
+					var test_world = new y_world("y_game");
+					yoel_engine_p.current_world = test_world;
+					yoel_engine_p.init();
+					
+					//create example entity
+					var test_e = new extanded_entity(100,100,0,"");
+				
+					//add it to world	
+					yoel_engine_p.current_world.add(test_e);
+
+
+				
+				}
+				</code></pre>
+			</div><!--end ypart1-->
+			<div class="ypart2">
+				<p>
+					inside main we declared a new game world:
+				</p>
+				<pre><code class="js">
+				//game main
+				function main()
+				{
+					var test_world = new y_world("y_game");
+				</code></pre>
+				<p>
+					a world is a class for ordering aspects of a game,
+					for example a game with a menu world and main game world etc.
+					each world contains entity objects and updates them(we will explain entitys later).
+					
+				</p>
+				<p>
+					at any time only one world can run on the engines game loop,while the other world objects dont update
+					(and all the entitys inside those worlds dont update).
+					in the next line we set test world as the current world (the world that the game loop will update)
+				</p>
+				<pre><code class="js">
+			
+					yoel_engine_p.current_world = test_world;
+				</code></pre>
+				
+				<p>
+					the next line will initialize the game engine and start the game loop.
+					the game loop updates the current world,the current world updates all the entitys inside it.
+				</p>
+				
+				<pre><code class="js">
+				yoel_engine_p.init();
+				</code></pre>
+				
+				<p>
+				the next two lines will create an example of an entity instance and add it to the current world
+				so its update method will be updated by the world update, which is updated by the game loop
+				that we initialized in the last line.
+				</p>
+				<pre><code class="js">
+						//create example entity
+					var test_e = new extanded_entity(100,100,0,"");
+				
+					//add it to world	
+					yoel_engine_p.current_world.add(test_e);
+
+
+				
+				}
+				</code></pre>
+				<p>
+				now i will show you a bare bone example of a new class that extands the entity class.
+				</p>
+				
+				<pre><code class="js">
+		
+
+					////////extanded_entity///////////
+
+					var extanded_entity = function(x,y,z,yimg,type)
+					{
+						this.type = 'extanded_entity'; 
+
+						//extand entity
+						y_entity.call(this,x,y,z,0,yimg);
+						
+						this.did_init = false;
+
+					}//end extanded_entity
+
+					var extanded_entity_p = extanded_entity.prototype; 
+
+					extanded_entity_p.init = function()
+					{
+						if(!this.did_init)
+						{
+							ytrace("did init");
+							this.did_init = true;
+						
+							
+						}
+					}//end init
+
+					extanded_entity_p.update = function()
+					{
+						//do stuff when class created
+						this.init();
+						
+						//call parent update func
+						y_entity_p.update.call(this); 
+
+					}//end update
+
+					extanded_entity_p.ynew_method = function()
+					{
+					}//end ynew_method
+
+
+					////////end extanded_entity///////////
+
+			    </code></pre>
+				
+				<p>
+				first line is the deceleration of the class(name and vars passed to the constructor)<br>
+				inside it are the attributes of the class<br>
+				and also a function calling the parent class constructor(javascript dosnt have
+				oop i managed to emulate some oop features like inheritance).
+				</p>
+				
+				<pre><code class="js">
+		
+
+					////////extanded_entity///////////
+
+					var extanded_entity = function(x,y,z,yimg,type)
+					{
+				</code></pre>
+				<p>
+					as mentioned in the last paragraph the deceleration of the class
+					and the vars passed to the constructor:x,y,z are coordinates (z is the z index not 3d depth
+					my engine is 2d). the type is the entitys type,used for collision detection and calling all class instances in
+					a game world by name (get_by_type("enemies") calls all enemy class instances in current world (it returns an array of entitys)  .<br>
+					will be discussed in depth in future tutorial).<br>
+					yimg is the url of the entitys graphic (spritmaps will be explained in a later tut)
+					
+				<p>
+				<pre><code class="js">
+		
+
+					this.type = 'extanded_entity'; 
+
+				</code></pre>
+				<p>
+				overrides parent class (entity class) type attribute.
+				</p>
+				
+				<pre><code class="js">
+		
+
+					//extand entity
+						y_entity.call(this,x,y,z,0,yimg);
+					 
+
+				</code></pre>
+				
+				<p>
+				calls the parent class constructor.pass the xyz cordenates,speed and img url to parent constructor(x,y,z,speed,img).
+				</p>
+				<pre><code class="js">
+		
+						this.did_init = false;
+				</code></pre>
+				<p>
+				 boolean,of the int() (initialize) method.used to run operations at the first
+				 entity update run.
+				</p>
+				<pre><code class="js">
+		
+					var extanded_entity_p = extanded_entity.prototype; 
+				</code></pre>
+				<p>
+				short cut for js object prototype. i use it to assign methods to the class
+				</p>
+				
+				<pre><code class="js">
+		
+					extanded_entity_p.init = function()
+					{
+						if(!this.did_init)
+						{
+							ytrace("did init");
+							this.did_init = true;
+						
+							
+						}
+					}//end init
+				</code></pre>
+				<p>
+					init short for initialize,everything inside the if will run once
+					when the entity will be add to the current world.on the first update of the entity.
+				</p>
+				<pre><code class="js">
+		
+					extanded_entity_p.update = function()
+					{
+						//do stuff when class created
+						this.init();
+						
+						//call parent update func
+						y_entity_p.update.call(this); 
+
+					}//end update 
+				</code></pre>
+				<p>
+					update method ,runs every time the main game loop runs.
+					inside it is the init method ,will run only once.
+					also the parent class update method is called at the end.
+				</p>
+				
+				<pre><code class="js">
+		
+					extanded_entity_p.ynew_method = function()
+					{
+					}//end ynew_method 
+				</code></pre>
+				<p>
+				example of a new method we created for this class.
+				</p>
+				<p>
+				finely we will add the main method at the end
+				</p>
+				<pre><code class="js">
+		
+				////////end extanded_entity///////////
+
+
+
+				//main
+				main(); 
+				</code></pre>
+				<p>
+				in this tutorial we learned the anatomy of the yoel game engine.<br>
+				in the next one we will demonstrate how to display an img and use kyboard and mouce
+				input.
+				</p>
+
+				
+			</div><!--end ypart2-->
+			<div class="ypart3">
+			
+			</div><!--end ypart3-->
+			<div class="ypart4"></div><!--end ypart4-->
+		</div>
+	
+    </div>
+    <!-- /.container -->
+	
+    <!-- script higlighter -->
+	
+
+    <!-- jQuery (necessary for Flat UI's JavaScript plugins) -->
+    <script src="js/vendor/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/vendor/video.js"></script>
+    <script src="js/flat-ui.min.js"></script>
+	<script>
+	///scroll to div when link is clicked
+	$( document ).ready(function() {
+	    $("yscroll").on('click', function(e) {
+
+			// prevent default anchor click behavior
+		   e.preventDefault();
+
+		   // animate
+		   $('html, body').animate({
+			   scrollTop: $(this.hash).offset().top
+			 }, 300, function(){
+	   
+			   // when done, add hash to url
+			   // (default click behaviour)
+			   window.location.hash = this.hash;
+			 });
+
+		});
+	});
+	</script>
+
+  </body>
+</html>

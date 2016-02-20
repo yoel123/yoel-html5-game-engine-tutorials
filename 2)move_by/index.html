@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+
+
+	<title>game design</title>
+
+ 	
+
+	<style>
+	
+		#y_game
+		{
+			position:relative;
+			background: #000 none repeat scroll 0 0;
+			overflow:hidden;
+			width:300px;
+		    height:500px;
+			
+		    color:white;
+			font-size:2em;
+			
+		    border:10px solid #333;
+		    margin:30px auto;
+		    box-shadow:5px 5px 10px #444;
+			transform-style: preserve-3d;
+			
+			
+		}
+	
+		.entity
+		{
+			position:absolute;
+			background:blue;
+			height:50px;
+			width:50px;
+			-webkit-transform-style: preserve-3d;
+			backface-visibility: hidden;
+			-webkit-transform: translate3d(0,0,0); 
+			transform: rotate(0deg);
+			-moz-transform:  rotate(0deg);
+			
+			
+		}
+		.hitbox
+		{
+			position:absolute;
+			border:solid 1px red;
+		}
+	</style>
+</head> 
+ 
+<body> 
+
+	<div id="y_game"></div>
+
+	
+	<script src="js/jquery-1.7.1.min.js"></script>
+	<script src="js/yoel_dom_game.js"></script>
+	
+	<script>
+	//game main
+	function main()
+	{
+		var test_world = new y_world("y_game");
+		yoel_engine_p.current_world = test_world;
+		yoel_engine_p.init();
+		//example img url
+		var ximg = "img/player.png";
+		//create example entity
+		var test_e = new extanded_entity(100,100,0,ximg);
+	
+	    //add it to world	
+        yoel_engine_p.current_world.add(test_e);
+
+
+	
+	}
+
+
+
+
+
+
+////////extanded_entity///////////
+
+var extanded_entity = function(x,y,z,yimg,type)
+{
+	this.type = 'extanded_entity'; 
+
+	//extand entity
+	y_entity.call(this,x,y,z,1,yimg);
+	
+
+
+	
+	this.did_init = false;
+
+}//end extanded_entity
+
+var extanded_entity_p = extanded_entity.prototype; 
+
+extanded_entity_p.init = function()
+{
+	if(!this.did_init)
+	{
+		ytrace("did init");
+
+		this.did_init = true;
+	
+		
+	}
+}//end init
+
+extanded_entity_p.update = function()
+{
+	//do stuff when class created
+	this.init();
+	
+	this.move();
+	
+	
+	//call parent update func
+	y_entity_p.update.call(this); 
+
+}//end update
+
+extanded_entity_p.move = function()
+{
+		
+		//reset x
+		if(this.x>200){this.x=0;}
+		//move left
+		y_entity_p.move_by.call(this,this.speed,0,0);
+		
+		//reset y
+		//if(this.y>200){this.y=0;}
+		//move down
+		//y_entity_p.move_by.call(this,0,this.speed,0);
+	
+}//end move
+
+
+
+	
+
+
+////////end extanded_entity///////////
+
+
+
+	//main
+	main();
+	</script>
+
+</body> 
+</html>

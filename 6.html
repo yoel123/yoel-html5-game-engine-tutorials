@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>tutorial 6</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Loading Bootstrap -->
+    <link href="css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Loading Flat UI -->
+    <link href="css/flat-ui.min.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+    <!--[if lt IE 9]>
+      <script src="js/vendor/html5shiv.js"></script>
+      <script src="js/vendor/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+        <h1>yoel html5 2d game engine programming tut 6</h1>
+		<h2>sprites</h2>
+		<hr>
+		<div class="row">
+			<div class="tile  palette palette-peter-river">
+				<p>
+				in this tutorial i will show how to spritemaps i your game.<br>
+				i used a very simple example with a very simple spritemap.
+				
+			    </p>
+			</div>
+			<div class="ypart1">
+				<p>
+				</p>
+				
+				<p>
+				the finished project is in file 6)sprites
+				</p>
+				
+				<p>
+				</p>
+				<p>
+					first we will will link the spitemap to our entity img attribute:
+				</p>
+				<pre><code class="js">
+				//game main
+				function main()
+				{
+					var test_world = new y_world("y_game");
+					yoel_engine_p.current_world = test_world;
+					yoel_engine_p.init();
+					//example img url
+					<span class=" palette-alizarin" >
+					var ximg = "img/sprite.png";
+					</span>
+					//create example entity
+					var test_e = new extanded_entity(100,100,0,ximg);
+					
+				
+					//add it to world	
+					yoel_engine_p.current_world.add(test_e);
+					
+				
+
+
+				
+				}
+				</code></pre>
+			</div><!--end ypart1-->
+			<div class="ypart2">
+				<p>
+				after that we will add a new animetion object in our entity constructor.
+				</p>
+			
+				<pre><code class="js">
+				////////extanded_entity///////////
+
+				var extanded_entity = function(x,y,z,yimg,type)
+				{
+					this.type = 'extanded_entity'; 
+
+					//extand entity
+					y_entity.call(this,x,y,z,3,yimg);
+					
+					<span class=" palette-alizarin" >
+					this.test_anim = new y_animation(this.id,50,40,"forword");
+					</span>
+					this.max_frames = 4-1;
+					
+					this.did_init = false;
+
+				}//end extanded_entity		
+				</code></pre>
+				<p>
+				next we will initiate the sound class in our init method:
+				</p>
+	
+				<pre><code class="js">
+					this.test_anim = new y_animation(id,width,height,dir)
+				</code></pre>
+				
+				<p>
+				the first argument is the dom elemnts id. we can access the id by calling
+				this.id (after the parent class constructor: y_entity.call(this...).<br>
+				the next two are thw width and height of a single frame of the spritemap.<br>
+				mine is 200px on 40px with 4 frames.
+				the last one is for direction of the spritemap...at the moment my engine
+				can use only spritsheets with frames side by side or vertical spritsheet.<br>
+				
+				the next line is:
+				
+				</p>
+				
+	
+				<pre><code class="js">
+				this.max_frames = 4-1;
+				</code></pre>
+				
+				
+				<p>
+				the spritemap has 4 frames but the frames count starts from 0, so its 0-3,so i wrote 4 -1<br>
+				so i remember its 4.
+				i will use this attribute to animate the spritshees.<br>
+				next we will add a new method called animate:
+				</p>
+				
+				<pre><code class="js">
+				extanded_entity_p.animate = function()
+				{
+					
+						//play sound on click space
+						if(y_input2_p.key_down[y_key.SPACE])
+						{
+							//increment current_frame
+							var frame = this.test_anim.current_frame+1;
+							this.test_anim.go_to_frame(frame);
+							
+						}
+						
+						//rewind
+						if(frame >this.max_frames)
+						{
+							this.test_anim.current_frame = 0;
+							this.test_anim.go_to_frame(0);
+						}
+
+					
+				}//end animate
+				</code></pre>
+				
+				<p>
+				we will also add it to update method:
+			   </p>
+			    
+			
+				
+				<pre><code class="js">
+				extanded_entity_p.update = function()
+				{
+					//do stuff when class created
+					this.init();
+					
+					<span class=" palette-alizarin" >
+					this.animate();
+					</span>
+					
+					//call parent update func
+					y_entity_p.update.call(this); 
+
+				}//end update
+				</code></pre>
+			   
+				<p>
+				the animation will activate when the player clicks space button
+    			</p>
+				<pre><code class="js">
+				
+				extanded_entity_p.animate = function()
+				{
+					
+						//play  on click space
+						<span class=" palette-alizarin" >
+						if(y_input2_p.key_down[y_key.SPACE])
+						{
+
+							
+						}
+						</span>
+
+					
+				}//end animate
+				</code></pre>
+				
+				<p>
+				after space is hit we will tell the animation object to go to the next frame,<br>
+				by adding 1 to curent frame and calling go_to_frame method:
+				
+				</p>
+				<pre><code class="js">
+				extanded_entity_p.animate = function()
+				{
+					
+						//play  on click space
+						if(y_input2_p.key_down[y_key.SPACE])
+						{
+							<span class=" palette-alizarin" >
+							//increment current_frame
+							var frame = this.test_anim.current_frame+1;
+							this.test_anim.go_to_frame(frame);
+							</span>
+							
+						}
+
+					
+				}//end animate
+			    </code></pre>
+				
+				<p>
+				finely we will rewind the animation once it reaches the last frame
+				</p>
+				<pre><code class="js">
+				extanded_entity_p.animate = function()
+				{
+					
+						//play  on click space
+						if(y_input2_p.key_down[y_key.SPACE])
+						{
+							//increment current_frame
+							var frame = this.test_anim.current_frame+1;
+							this.test_anim.go_to_frame(frame);
+							
+						}
+						<span class=" palette-alizarin" >
+						//rewind
+						if(frame >this.max_frames)
+						{
+							this.test_anim.current_frame = 0;
+							this.test_anim.go_to_frame(0);
+						}
+						</span>
+
+					
+				}//end animate
+				 </code></pre>
+				 <p>
+				 if we had more animation states we could of told the animation to go to the start of
+				 another animation frame. 
+				</p>
+				
+				<p>
+				i the next tut i will show how to use timers.
+				</p>
+				
+			</div><!--end ypart2-->
+			<div class="ypart3"></div><!--end ypart3-->
+			<div class="ypart4"></div><!--end ypart4-->
+		</div>
+	
+    </div>
+    <!-- /.container -->
+	
+    <!-- script higlighter -->
+	
+
+    <!-- jQuery (necessary for Flat UI's JavaScript plugins) -->
+    <script src="js/vendor/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/vendor/video.js"></script>
+    <script src="js/flat-ui.min.js"></script>
+	<script>
+	///scroll to div when link is clicked
+	$( document ).ready(function() {
+	    $("yscroll").on('click', function(e) {
+
+			// prevent default anchor click behavior
+		   e.preventDefault();
+
+		   // animate
+		   $('html, body').animate({
+			   scrollTop: $(this.hash).offset().top
+			 }, 300, function(){
+	   
+			   // when done, add hash to url
+			   // (default click behaviour)
+			   window.location.hash = this.hash;
+			 });
+
+		});
+	});
+	</script>
+
+  </body>
+</html>

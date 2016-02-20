@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+
+
+	<title>game design</title>
+
+ 	
+
+	<style>
+	
+		#y_game
+		{
+			position:relative;
+			background: #000 none repeat scroll 0 0;
+			overflow:hidden;
+			width:300px;
+		    height:500px;
+			
+		    color:white;
+			font-size:2em;
+			
+		    border:10px solid #333;
+		    margin:30px auto;
+		    box-shadow:5px 5px 10px #444;
+			transform-style: preserve-3d;
+			
+			
+		}
+	
+		.entity
+		{
+			position:absolute;
+			background:blue;
+			height:50px;
+			width:50px;
+			-webkit-transform-style: preserve-3d;
+			backface-visibility: hidden;
+			-webkit-transform: translate3d(0,0,0); 
+			transform: rotate(0deg);
+			-moz-transform:  rotate(0deg);
+			
+			
+		}
+		.hitbox
+		{
+			position:absolute;
+			border:solid 1px red;
+		}
+	</style>
+</head> 
+ 
+<body> 
+
+	<div id="y_game"></div>
+
+	
+	<script src="js/jquery-1.7.1.min.js"></script>
+	<script src="js/yoel_dom_game.js"></script>
+	
+	<script>
+	//game main
+	function main()
+	{
+		var test_world = new y_world("y_game");
+		yoel_engine_p.current_world = test_world;
+		yoel_engine_p.init();
+		//example img url
+		var ximg = "img/sprite.png";
+		//create example entity
+		var test_e = new extanded_entity(100,100,0,ximg);
+		
+	
+	    //add it to world	
+        yoel_engine_p.current_world.add(test_e);
+		
+    
+
+
+	
+	}
+
+
+
+
+
+
+////////extanded_entity///////////
+
+var extanded_entity = function(x,y,z,yimg,type)
+{
+	this.type = 'extanded_entity'; 
+
+	//extand entity
+	y_entity.call(this,x,y,z,3,yimg);
+	
+
+	this.test_anim = new y_animation(this.id,50,40,"forword");
+	this.max_frames = 4-1;
+	
+	this.did_init = false;
+
+}//end extanded_entity
+
+var extanded_entity_p = extanded_entity.prototype; 
+
+extanded_entity_p.init = function()
+{
+	if(!this.did_init)
+	{
+		ytrace("did init");
+			//init click handler
+		
+		this.did_init = true;
+	
+		
+	}
+}//end init
+
+extanded_entity_p.update = function()
+{
+	//do stuff when class created
+	this.init();
+	
+
+	this.animate();
+	
+	
+	//call parent update func
+	y_entity_p.update.call(this); 
+
+}//end update
+
+extanded_entity_p.animate = function()
+{
+	
+		//play  on click space
+		if(y_input2_p.key_down[y_key.SPACE])
+		{
+			//increment current_frame
+			var frame = this.test_anim.current_frame+1;
+			this.test_anim.go_to_frame(frame);
+			
+		}
+		
+		//rewind
+		if(frame >this.max_frames)
+		{
+			this.test_anim.current_frame = 0;
+			this.test_anim.go_to_frame(0);
+		}
+
+	
+}//end animate
+
+////////end extanded_entity///////////
+
+
+
+	//main
+	main();
+	</script>
+
+</body> 
+</html>

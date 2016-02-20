@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>tutorial 5</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Loading Bootstrap -->
+    <link href="css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Loading Flat UI -->
+    <link href="css/flat-ui.min.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+    <!--[if lt IE 9]>
+      <script src="js/vendor/html5shiv.js"></script>
+      <script src="js/vendor/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+        <h1>yoel html5 2d game engine programming tut 5</h1>
+		<h2>sound</h2>
+		<hr>
+		<div class="row">
+			<div class="tile  palette palette-peter-river">
+				<p>
+				in this tutorial i will show how to use sound i your game.
+			    </p>
+			</div>
+			<div class="ypart1">
+				<p>
+				</p>
+				
+				<p>
+				the finished project is in file 5)sound
+				</p>
+				
+				<p>
+				</p>
+				<p>
+					first we will create a new sound obgect in the entitys class constructor.
+				</p>
+				<pre><code class="js">
+				////////extanded_entity///////////
+
+				var extanded_entity = function(x,y,z,yimg,type)
+				{
+					this.type = 'extanded_entity'; 
+
+					//extand entity
+					y_entity.call(this,x,y,z,3,yimg);
+					
+					//y_sound(sound,volume,loop);
+					<span class=" palette-alizarin" >
+					this.test_sound = new y_sound("sound/laser.wav",.12,false);
+					</span>
+					this.did_init = false;
+
+				}//end extanded_entity
+				</code></pre>
+			</div><!--end ypart1-->
+			<div class="ypart2">
+				<p>
+				the class y_sound gets 3 arguments:sound,volume,loop.
+				sound: a link to the sound file.<br>
+				volume:the sounds volume from 0 to 1.<br>
+				loop:a boolean that determines if the sound will loop when it finesses playing.<br>
+				</p>
+			
+				<pre><code class="js">
+				y_sound(sound,volume,loop);			
+				</code></pre>
+				<p>
+				next we will initiate the sound class in our init method:
+				</p>
+	
+				<pre><code class="js">
+				extanded_entity_p.init = function()
+				{
+					if(!this.did_init)
+					{
+						ytrace("did init");
+							//init click handler
+						<span class=" palette-alizarin" >
+						 this.test_sound.init();
+						</span>
+						this.did_init = true;
+					
+						
+					}
+				}//end init
+				</code></pre>
+				
+				<p>
+				then we will create a new method called play sound:
+				</p>
+	
+				<pre><code class="js">
+				extanded_entity_p.play_sound = function()
+				{
+					
+						//play sound on click space
+						if(y_input2_p.key_down[y_key.SPACE])
+						{
+							this.test_sound.play();
+						}
+
+					
+				}//end move
+				</code></pre>
+				
+				
+				<p>
+				the sound will play when space is clicked.
+				there is also a stop method:
+				</p>
+				
+				<pre><code class="js">
+				this.test_sound.stop();
+				</code></pre>
+				
+				<p>
+				finely we will add the method to the update method:
+			   </p>
+			    
+			
+				
+				<pre><code class="js">
+				extanded_entity_p.update = function()
+				{
+					//do stuff when class created
+					this.init();
+					
+
+					this.play_sound();
+					
+					
+					//call parent update func
+					y_entity_p.update.call(this); 
+
+				}//end update
+				</code></pre>
+			   
+				<p>
+				in the next tut we will demonstrate how to use spritesheets.
+    			</p>
+				
+			
+				
+			</div><!--end ypart2-->
+			<div class="ypart3"></div><!--end ypart3-->
+			<div class="ypart4"></div><!--end ypart4-->
+		</div>
+	
+    </div>
+    <!-- /.container -->
+	
+    <!-- script higlighter -->
+	
+
+    <!-- jQuery (necessary for Flat UI's JavaScript plugins) -->
+    <script src="js/vendor/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/vendor/video.js"></script>
+    <script src="js/flat-ui.min.js"></script>
+	<script>
+	///scroll to div when link is clicked
+	$( document ).ready(function() {
+	    $("yscroll").on('click', function(e) {
+
+			// prevent default anchor click behavior
+		   e.preventDefault();
+
+		   // animate
+		   $('html, body').animate({
+			   scrollTop: $(this.hash).offset().top
+			 }, 300, function(){
+	   
+			   // when done, add hash to url
+			   // (default click behaviour)
+			   window.location.hash = this.hash;
+			 });
+
+		});
+	});
+	</script>
+
+  </body>
+</html>

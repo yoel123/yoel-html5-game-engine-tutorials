@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>tutorial 4</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Loading Bootstrap -->
+    <link href="css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Loading Flat UI -->
+    <link href="css/flat-ui.min.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+    <!--[if lt IE 9]>
+      <script src="js/vendor/html5shiv.js"></script>
+      <script src="js/vendor/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+        <h1>yoel html5 2d game engine programming tut 4</h1>
+		<h2>set img and move entity</h2>
+		<hr>
+		<div class="row">
+			<div class="tile  palette palette-peter-river">
+				<p>
+				in this tutorial i will show how to use collision detection with my engine.
+			    </p>
+			</div>
+			<div class="ypart1">
+				<p>
+				</p>
+				
+				<p>
+				the finished project is in file 4)hit test Collision detection
+				</p>
+				
+				<p>
+				</p>
+				<p>
+					first we will create a new entity class alled pussble.<br>
+					it will be a object that the player can push,with the player object.
+				</p>
+				<pre><code class="js">
+				////////pushable///////////
+
+				var pushable = function(x,y,z,yimg,type)
+				{
+					<span class=" palette-alizarin" >
+					this.type = 'ypushable'; 
+					</span>
+					//extand entity
+					
+					y_entity.call(this,x,y,z,3,yimg);
+
+					this.did_init = false;
+
+				}//end extanded_entity
+
+				var pushable_p = pushable.prototype; 
+
+				pushable_p.init = function()
+				{
+					if(!this.did_init)
+					{
+						ytrace("did init");
+
+						this.did_init = true;
+
+						
+					}
+				}//end init
+
+				pushable_p.update = function()
+				{
+					//do stuff when class created
+					this.init();
+					//call parent update func
+					y_entity_p.update.call(this); 
+
+				}//end update
+				</code></pre>
+			</div><!--end ypart1-->
+			<div class="ypart2">
+				<p>
+				the new class has an update and init func,like all entitys.
+				the type attribute is changed to 'ypushable'. as explaind i an 
+				erlier tut the type att is used to call entitys by type and collision
+				detection.
+				</p>
+				<p>
+				we will add a new method called collide to pushable class
+				</p>
+				<pre><code class="js">
+				pushable_p.collide = function()
+				{
+
+				}//end collide			
+				</code></pre>
+				<p>
+				we will also add the method to the update method.
+				so it will check for collision all the time. 
+				</p>
+	
+				<pre><code class="js">
+				pushable_p.update = function()
+				{
+					//do stuff when class created
+					this.init();
+					<span class=" palette-alizarin" >
+					this.collide();
+					</span>
+
+					
+					//call parent update func
+					y_entity_p.update.call(this); 
+
+				}//end update
+				</code></pre>
+				
+				<p>
+				to use the collision detection i called with this line.
+				</p>
+	
+				<pre><code class="js">
+				y_entity_p.colide.call(this,"entity_type");
+				</code></pre>
+				
+				
+				<p>
+				first argument sends this object,the second one is 
+				the entity type that we want to check collision with.<br>
+				the function returns the last collided entity.<br>
+				if there is no collision the function returns false.
+				now i will show you how its actualy used:
+				</p>
+				
+				<pre><code class="js">
+				pushable_p.collide = function()
+				{
+					<span class=" palette-alizarin" >
+					//hit test
+					hit_test = y_entity_p.colide.call(this,"extanded_entity");
+
+					if(hit_test)
+					{
+						//move 10px on x axis
+						y_entity_p.move_by.call(this,10,0,0);
+					}
+					</span>
+				}//end collide
+				</code></pre>
+				
+				<p>
+				if a hit test is detected, move the entity 10 px to the right(on the x axis).
+			    </p>
+			    
+				<p>
+			    you can also change hitbox size and turn debug mode off.these are the 3 atributes that do that:
+				</p>
+				
+				<pre><code class="js">
+				////////pushable///////////
+
+				var pushable = function(x,y,z,yimg,type)
+				{
+					this.type = 'ypushable'; 
+
+					//extand entity
+					y_entity.call(this,x,y,z,3,yimg);
+					<span class=" palette-alizarin" >
+					this.hitbox_width=70;
+					this.hitbox_height=50;
+					//this.collision_show = false;
+					</span>
+					this.did_init = false;
+
+				}//end extanded_entity
+				</code></pre>
+			    
+				<p>
+			    all that is left to do is add the pushable entity to the world in the main.
+				the other class is the extanded_entity, that the player can control with the keyboard.<br>
+				(chack last tut about inputs).
+				</p>
+				
+				
+				<pre><code class="js">
+				//game main
+				function main()
+				{
+					var test_world = new y_world("y_game");
+					yoel_engine_p.current_world = test_world;
+					yoel_engine_p.init();
+					//example img url
+					var ximg = "img/player.png";
+					//create example entity
+					var test_e = new extanded_entity(100,100,0,ximg);
+					<span class=" palette-alizarin" >
+					var test_pushble = new pushable(150,100,0,"");
+					</span>
+					//add it to world	
+					yoel_engine_p.current_world.add(test_e);
+					<span class=" palette-alizarin" >
+					yoel_engine_p.current_world.add(test_pushble);
+					</span>
+
+				
+				}
+				</code></pre>
+				<p>
+				in the next tut we will demonstrate how to use sound effects.
+    			</p>
+				
+			
+				
+			</div><!--end ypart2-->
+			<div class="ypart3"></div><!--end ypart3-->
+			<div class="ypart4"></div><!--end ypart4-->
+		</div>
+	
+    </div>
+    <!-- /.container -->
+	
+    <!-- script higlighter -->
+	
+
+    <!-- jQuery (necessary for Flat UI's JavaScript plugins) -->
+    <script src="js/vendor/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/vendor/video.js"></script>
+    <script src="js/flat-ui.min.js"></script>
+	<script>
+	///scroll to div when link is clicked
+	$( document ).ready(function() {
+	    $("yscroll").on('click', function(e) {
+
+			// prevent default anchor click behavior
+		   e.preventDefault();
+
+		   // animate
+		   $('html, body').animate({
+			   scrollTop: $(this.hash).offset().top
+			 }, 300, function(){
+	   
+			   // when done, add hash to url
+			   // (default click behaviour)
+			   window.location.hash = this.hash;
+			 });
+
+		});
+	});
+	</script>
+
+  </body>
+</html>

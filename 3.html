@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>tutorial 3</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Loading Bootstrap -->
+    <link href="css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Loading Flat UI -->
+    <link href="css/flat-ui.min.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+    <!--[if lt IE 9]>
+      <script src="js/vendor/html5shiv.js"></script>
+      <script src="js/vendor/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+        <h1>yoel html5 2d game engine programming tut 3</h1>
+		<h2>set img and move entity</h2>
+		<hr>
+		<div class="row">
+			<div class="tile  palette palette-peter-river">
+				<p>
+				in this tutorial i will show how to get mouse and keyboard input from the player.<br>
+				in mobile devices the click is like touch event.
+			    </p>
+			</div>
+			<div class="ypart1">
+				<p>
+				</p>
+				
+				<p>
+				the finished project is in file 3)keyboard and input
+				</p>
+				
+				<p>
+				</p>
+				<p>
+					the main is the same as our last tut.
+				</p>
+				<pre><code class="js">
+				//game main
+				function main()
+				{
+					var test_world = new y_world("y_game");
+					yoel_engine_p.current_world = test_world;
+					yoel_engine_p.init();
+					//example img url
+					var ximg = "";
+					//create example entity
+					var test_e = new extanded_entity(100,100,0,ximg);
+				
+					//add it to world	
+					yoel_engine_p.current_world.add(test_e);
+
+
+				
+				}
+				</code></pre>
+			</div><!--end ypart1-->
+			<div class="ypart2">
+				<p>
+					to get click input we need to add a click event listener to the
+					entity, to do that all we need to do is add one line to the
+					init method of extanded_entity.
+				</p>
+				<pre><code class="js">
+				extanded_entity_p.init = function()
+				{
+					if(!this.did_init)
+					{
+						ytrace("did init");
+							//init click handler
+						<span class=" palette-alizarin" > y_entity_p.click_chack.call(this);
+						</span>
+						this.did_init = true;
+					
+						
+					}
+				}//end init
+				</code></pre>
+				<p>
+				after that we will add a new method for extended entity,named click.
+				</p>
+	
+				<pre><code class="js">
+				extanded_entity_p.click = function()
+				{
+			
+				}//end click
+				</code></pre>
+				
+				<p>
+				then we will add it to the update method so it will chack for click
+				while the entity is active.
+				</p>
+	
+				<pre><code class="js">
+				extanded_entity_p.update = function()
+				{
+					//do stuff when class created
+					this.init();
+					
+					<span class=" palette-alizarin" > this.click();
+					</span>
+					
+					//call parent update func
+					y_entity_p.update.call(this); 
+
+				}//end update
+				</code></pre>
+				
+				
+				<p>
+				then we will check if entity is clicked,else exit the method
+				(we tell the method to only run when entity is clicked).
+				</p>
+				
+				<pre><code class="js">
+				extanded_entity_p.click = function()
+				{
+				<span class=" palette-alizarin" >	if(this.is_clicked){}else{return;}//exit if no click
+				</span>
+				}//end click
+				</code></pre>
+				
+				<p>
+				to check if it works we will add a console log.
+			    </p>
+				
+				<pre><code class="js">
+				extanded_entity_p.click = function()
+				{
+					if(this.is_clicked){}else{return;}//exit if no click
+
+					<span class=" palette-alizarin" >ytrace("clicked");
+					</span>
+				}//end click
+				</code></pre>
+				<p>
+				then we want to see something happing when we click the entity so
+				we will add a move by function.
+    			</p>
+				
+				<pre><code class="js">
+				extanded_entity_p.click = function()
+				{
+					if(this.is_clicked){}else{return;}//exit if no click
+					<span class=" palette-alizarin" > var speed = this.speed;
+					</span>
+					ytrace("clicked");
+					<span class=" palette-alizarin" >
+					y_entity_p.move_by.call(this,-speed,0,0);
+					</span>
+				}//end click
+
+			    </code></pre>
+				
+				<p>
+		        now we will add keyboard control,first add a new method called move.
+				</p>
+				
+				<pre><code class="js">
+		
+				extanded_entity_p.move = function()
+				{
+						
+					
+				}//end move
+				</code></pre>
+				<p>
+					then we will add it to the update function,so the entity will run move every update.
+				<p>
+				<pre><code class="js">
+		
+
+					extanded_entity_p.update = function()
+					{
+						//do stuff when class created
+						this.init();
+						
+						<span class=" palette-alizarin" >this.move();</span>
+						
+						
+						//call parent update func
+						y_entity_p.update.call(this); 
+
+					}//end update 
+
+				</code></pre>
+				<p>
+				now we will check if a or left is clicked.
+				</p>
+				
+				<pre><code class="js">
+		
+
+				extanded_entity_p.move = function()
+				{
+					<span class=" palette-alizarin" >	
+						 var speed = this.speed;
+		
+						//move left
+						if(y_input2_p.key_down[y_key.A] ||y_input2_p.key_down[y_key.left])
+						{
+							y_entity_p.move_by.call(this,-speed,0,0);
+						}
+					
+					
+					</span>
+					
+				}//end move
+					 
+
+				</code></pre>
+				
+				<p>
+				first we called the entity's speed attribute,then we checked if a or left is clicked<br>
+				if true move by -speed ,that will make the entity move left.
+				</p>
+				
+				<p>
+				to check if a key is pressed,you call this array:
+				</p>
+				<pre><code class="js">
+		
+					y_input2_p.key_down
+				</code></pre>
+				<p>
+				it holds almost all the keyboard keys ,whenever a key is down the event listener
+				changes the keys value in the array to true.
+				for example:
+				</p>
+				<pre><code class="js">
+				y_input2_p.key_down[y_key.D]
+
+				</code></pre>
+				<p>
+				will return true 
+				if the d key is down.
+				</p>
+				
+				<p>
+				we will do the same for up down and right.
+				</p>
+				
+				<pre><code class="js">
+				extanded_entity_p.move = function()
+				{
+
+
+						var speed = this.speed;
+						
+						//move left
+						if(y_input2_p.key_down[y_key.A] ||y_input2_p.key_down[y_key.left])
+						{
+							y_entity_p.move_by.call(this,-speed,0,0);
+						}
+						//move right
+						if(y_input2_p.key_down[y_key.D] || y_input2_p.key_down[y_key.right])
+						{
+							y_entity_p.move_by.call(this,speed,0,0);
+						}
+						//move up
+						if(y_input2_p.key_down[y_key.W]  || y_input2_p.key_down[y_key.up])
+						{
+							y_entity_p.move_by.call(this,0,-speed,0);
+						}
+						//move down
+						if(y_input2_p.key_down[y_key.S]|| y_input2_p.key_down[y_key.down])
+						{
+							y_entity_p.move_by.call(this,0,speed,0);
+						}
+					
+				}//end move
+
+				</code></pre>
+				
+				<p>
+				its mostly just copy and paste for the same thing<br>
+				in the next tut we will learn about collision detection.
+				</p>
+		
+
+				
+			</div><!--end ypart2-->
+			<div class="ypart3"></div><!--end ypart3-->
+			<div class="ypart4"></div><!--end ypart4-->
+		</div>
+	
+    </div>
+    <!-- /.container -->
+	
+    <!-- script higlighter -->
+	
+
+    <!-- jQuery (necessary for Flat UI's JavaScript plugins) -->
+    <script src="js/vendor/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/vendor/video.js"></script>
+    <script src="js/flat-ui.min.js"></script>
+	<script>
+	///scroll to div when link is clicked
+	$( document ).ready(function() {
+	    $("yscroll").on('click', function(e) {
+
+			// prevent default anchor click behavior
+		   e.preventDefault();
+
+		   // animate
+		   $('html, body').animate({
+			   scrollTop: $(this.hash).offset().top
+			 }, 300, function(){
+	   
+			   // when done, add hash to url
+			   // (default click behaviour)
+			   window.location.hash = this.hash;
+			 });
+
+		});
+	});
+	</script>
+
+  </body>
+</html>

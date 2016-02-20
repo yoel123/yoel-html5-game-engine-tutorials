@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>tutorial 2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Loading Bootstrap -->
+    <link href="css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Loading Flat UI -->
+    <link href="css/flat-ui.min.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="img/favicon.ico">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+    <!--[if lt IE 9]>
+      <script src="js/vendor/html5shiv.js"></script>
+      <script src="js/vendor/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+        <h1>yoel html5 2d game engine programming tut 2</h1>
+		<h2>set img and move entity</h2>
+		<hr>
+		<div class="row">
+			<div class="tile  palette palette-peter-river">
+				<p>
+				in this tutorial i will show how to set entity img and how to move an entity.
+			    </p>
+			</div>
+			<div class="ypart1">
+				<p>
+				</p>
+				
+				<p>
+				first thing you shod do is download the empty template from the git repository
+				</p>
+				<a href="#">link to empty game template download</a>
+				<p>
+				</p>
+				<p>
+					after download and extraction of the files, open index.html, then go to
+					game main,you shod see near the bottom of the page this:
+					
+					also included with the lessons download are all the example this one is 2)move_by.<br>
+					you can open it and see the finel result of this tut.
+				</p>
+				<pre><code class="js">
+				//game main
+				function main()
+				{
+					var test_world = new y_world("y_game");
+					yoel_engine_p.current_world = test_world;
+					yoel_engine_p.init();
+					
+					//create example entity
+					var test_e = new extanded_entity(100,100,0,"");
+				
+					//add it to world	
+					yoel_engine_p.current_world.add(test_e);
+
+
+				
+				}
+				</code></pre>
+			</div><!--end ypart1-->
+			<div class="ypart2">
+				<p>
+					to declare an img for the entity we will change the third 
+					argument of extanded_entity instance test_e,hilighted in red
+				</p>
+				<pre><code class="js">
+				//game main
+				function main()
+				{
+					var test_world = new y_world("y_game");
+					yoel_engine_p.current_world = test_world;
+					yoel_engine_p.init();
+					
+					//create example entity
+					var test_e = new extanded_entity(100,100,0,<span class=" palette-alizarin" >""</span>);
+				
+					//add it to world	
+					yoel_engine_p.current_world.add(test_e);
+
+
+				
+				}
+				</code></pre>
+				<p>
+					we will create a variable holding the img address and add it as the third argument.
+				</p>
+	
+				<pre><code class="js">
+			
+						//game main
+						function main()
+						{
+							var test_world = new y_world("y_game");
+							yoel_engine_p.current_world = test_world;
+							yoel_engine_p.init();
+							//example img url
+							<span class=" palette-alizarin" >var ximg = "img/player.png";</span>
+							//create example entity
+							var test_e = new extanded_entity(100,100,0,<span class=" palette-alizarin" >ximg</span>);
+						
+							//add it to world	
+							yoel_engine_p.current_world.add(test_e);
+
+
+						
+						}
+				</code></pre>
+				
+				<p>
+					now we will make the entity move using the move_by method
+				</p>
+				
+				<pre><code class="js">
+				y_entity_p.move_by.call(this,x,y,z);
+				</code></pre>
+				
+				<p>
+				move_by is a static method of y_entity class,the first argument pass this object
+				the second one is the x coordinate amount the entity will move,the second one is y
+				coordinate amount the entity will move.z sets the css z inedex.
+				</p>
+				
+				<p>
+				first we will set the speed attribute in y_entity parent constructor.
+				inside extanded_entity constructor.
+				</p>
+				
+				<pre><code class="js">
+					////////extanded_entity///////////
+
+				var extanded_entity = function(x,y,z,yimg,type)
+				{
+					this.type = 'extanded_entity'; 
+
+					//extand entity
+					y_entity.call(this,x,y,z,<span class=" palette-alizarin" >1</span>,yimg);
+					
+
+
+					
+					this.did_init = false;
+
+				}//end extanded_entity
+				</code></pre>
+				<p>
+				accessing (calling/setting) the speed atribute is done with this.speed
+				</p>
+				
+				<pre><code class="js">
+					this.speed
+
+			    </code></pre>
+				
+				<p>
+				now we will add a new method to extanded_entity class
+				</p>
+				
+				<pre><code class="js">
+		
+				extanded_entity_p.move = function()
+				{
+						
+					
+				}//end move
+				</code></pre>
+				<p>
+					then we will add it to the update function,so the entity will run move every update.
+				<p>
+				<pre><code class="js">
+		
+
+					extanded_entity_p.update = function()
+					{
+						//do stuff when class created
+						this.init();
+						
+						<span class=" palette-alizarin" >this.move();</span>
+						
+						
+						//call parent update func
+						y_entity_p.update.call(this); 
+
+					}//end update 
+
+				</code></pre>
+				<p>
+					we will add move_by to the move method so the entity will actualy move
+				</p>
+				
+				<pre><code class="js">
+		
+
+				extanded_entity_p.move = function()
+				{
+						
+						//move left
+					<span class=" palette-alizarin" >y_entity_p.move_by.call(this,this.speed,0,0);</span>
+					
+				}//end move
+					 
+
+				</code></pre>
+				
+				<p>
+					this will make the entity move left by the speed attribute of this entity (+1px every update)
+				</p>
+				
+				<p>
+					to make the entity move on the y axis we will move this.speed to the second argument.
+				</p>
+				<pre><code class="js">
+		
+						extanded_entity_p.move = function()
+						{
+								
+							//move down
+							<span class=" palette-alizarin" >
+							y_entity_p.move_by.call(this,0,this.speed,0);
+							</span>
+							
+						}//end move
+				</code></pre>
+				<p>
+				last thing we will add is an if statement that checks if x is bigger then 200<br>
+				if true set entity x back to 0 
+				</p>
+				<pre><code class="js">
+		
+					extanded_entity_p.move = function()
+{
+		
+							//reset x
+							if(this.x>200){this.x=0;}
+							//move left
+							y_entity_p.move_by.call(this,this.speed,0,0);
+							
+							//reset y
+							//if(this.y>200){this.y=0;}
+							//move down
+							//y_entity_p.move_by.call(this,0,this.speed,0);
+						
+					}//end move
+
+				</code></pre>
+				<p>
+				the reset y and move down is commented out you may test it and play with the code<br>
+				in the next tutorial i will show how to use inputs of keyboard and mouse.
+				</p>
+		
+
+				
+			</div><!--end ypart2-->
+			<div class="ypart3"></div><!--end ypart3-->
+			<div class="ypart4"></div><!--end ypart4-->
+		</div>
+	
+    </div>
+    <!-- /.container -->
+	
+    <!-- script higlighter -->
+	
+
+    <!-- jQuery (necessary for Flat UI's JavaScript plugins) -->
+    <script src="js/vendor/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/vendor/video.js"></script>
+    <script src="js/flat-ui.min.js"></script>
+	<script>
+	///scroll to div when link is clicked
+	$( document ).ready(function() {
+	    $("yscroll").on('click', function(e) {
+
+			// prevent default anchor click behavior
+		   e.preventDefault();
+
+		   // animate
+		   $('html, body').animate({
+			   scrollTop: $(this.hash).offset().top
+			 }, 300, function(){
+	   
+			   // when done, add hash to url
+			   // (default click behaviour)
+			   window.location.hash = this.hash;
+			 });
+
+		});
+	});
+	</script>
+
+  </body>
+</html>
