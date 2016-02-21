@@ -7,6 +7,7 @@ the finished projects are also numbered the same as the html files.
 use "ygame template" folder to create your project simply copy it and edit index.html inside the folder.
 
 if theirs any mistake or something you dont understand please contact me.
+
 i also use this game engine to teach game devlopment(privete tutoring ).
 
 contact form:
