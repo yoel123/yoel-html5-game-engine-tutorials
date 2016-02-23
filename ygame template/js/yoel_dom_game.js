@@ -109,6 +109,7 @@ y_world_p.update = function ()
 			{
 				this.y_world_mc[i].update();
 				//ytrace($(window).width())
+				
 
 			}
 			//console.log(typeof this.y_world_mc[i]);
@@ -125,6 +126,21 @@ y_world_p.update = function ()
 	}
 
 }//end update
+
+y_world_p.change_world = function (world)
+{
+	//hide all entitys in this world
+	for(var i = 0, len =this.y_world_mc.length;len > i; i++ )
+	{
+		y_entity_p.visble.call(this.y_world_mc[i],false);
+	}
+	//show all in new world
+	for(var i = 0, len =world.y_world_mc.length;len > i; i++ )
+	{
+		y_entity_p.visble.call(world.y_world_mc[i],true);
+	}
+	yoel_engine_p.current_world = yoel_engine_p.current_world;
+}//change_world
 
 y_world_p.add = function (entity)
 {
