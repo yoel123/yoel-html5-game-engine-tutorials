@@ -8,7 +8,7 @@ use "ygame template" folder to create your project simply copy it and edit index
 
 if theirs any mistake or something you dont understand please contact me.
 
-i also use this game engine to teach game devlopment(privete tutoring ). <b>if you want to learn game programing,please conntact me using the contact form.</b>
+i also use this game engine to teach game devlopment(privete tutoring ). <b>if you want to learn game programing,please contact me using the contact form.</b>
 
 contact form:
 
