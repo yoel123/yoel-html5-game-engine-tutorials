@@ -839,8 +839,8 @@ y_input2.prototype.key_down[event.keyCode] = false;
 //mousemove
 window.addEventListener("mousemove", function (mouseEvent){
 		
-		var mouse_x_cor = mouseEvent.offsetX;
-   		var mouse_y_cor = mouseEvent.offsetY;
+		var mouse_x_cor = mouseEvent.pageX;
+   		var mouse_y_cor = mouseEvent.pageY;
 		
 		y_input2.prototype.mouse_cor.x = mouse_x_cor;
 		y_input2.prototype.mouse_cor.y = mouse_y_cor;
