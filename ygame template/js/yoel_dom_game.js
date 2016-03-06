@@ -28,6 +28,8 @@ var yoel_engine_p = yoel_engine.prototype;
 
 yoel_engine_p.current_world = "";
 yoel_engine_p.camera = {x:0,y:0,z:1,f:100};
+yoel_engine_p.world_num = 0;
+
 yoel_engine_p.init= function ()
 {
   yoel_engine_p.current_world.init();
@@ -83,6 +85,7 @@ var y_world= function (game_wraper)
 	this.game_wraper = game_wraper;
 	this.scene = 1;
 	this.entity_count = 0;
+	this.world_id = yoel_engine_p.world_num++;
 	//array that holds all the worlds entitys
 	this.y_world_mc = new Array();
 	this.cam = {x:0,y:0,z:0}
@@ -139,8 +142,17 @@ y_world_p.change_world = function (world)
 	{
 		y_entity_p.visble.call(world.y_world_mc[i],true);
 	}
-	yoel_engine_p.current_world = yoel_engine_p.current_world;
+	yoel_engine_p.current_world = world;
 }//change_world
+y_world_p.not_active = function ()
+{
+		//hide all entitys in this world
+	for(var i = 0, len =this.y_world_mc.length;len > i; i++ )
+	{
+		y_entity_p.visble.call(this.y_world_mc[i],false);
+	}
+}//end not_active
+
 
 y_world_p.add = function (entity)
 {
@@ -190,7 +202,7 @@ var y_entity= function (x,y,z,speed,img)
 		this.type="entity";
 	}
 	this.world = yoel_engine_p.current_world;
-	this.id="entity"+this.world.entity_count;
+	this.id="entity"+this.world.entity_count+"_"+this.world.world_id;
 	this.world.entity_count++;//there was a bug when incremented n init,its need to be here
 	this.scene=1;
 	this.x=x;
@@ -522,7 +534,6 @@ y_entity_p.distanse = function(x,y)
 
 y_entity_p.click_chack= function()
 {
-		
 	//if(this.did_click_chake_init){return;}//dont want too meany click event
 
 	var that = this;
@@ -1283,6 +1294,17 @@ function EuclideanDistance(Point, Goal)
 	// diagonal movement using Euclide (AC = sqrt(AB^2 + BC^2))
 	// where AB = x2 - x1 and BC = y2 - y1 and AC will be [x3, y3]
 	return Math.sqrt(Math.pow(Point.x - Goal.x, 2) + Math.pow(Point.y - Goal.y, 2));
+}
+
+//radian to angle
+function r2d(x) 
+{
+    return x / (Math.PI / 180);
+}
+//angle to radian
+function d2r(x) 
+{
+    return x * (Math.PI / 180);
 }
 /////////end math stuff///////////
 
