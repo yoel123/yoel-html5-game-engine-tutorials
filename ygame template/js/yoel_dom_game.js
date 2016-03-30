@@ -318,7 +318,7 @@ y_entity_p.update=function()
 	if(this.is_clicked){this.is_clicked = false;}//if is clicked reset flag
 	if(this.yclicked_key){this.yclicked_key = false; }//if is clicked reset flag
 	//y_entity_p.colide.call(this,"entity");
-	
+	y_entity_p.set_cor.call(this);//just incas of other dv left/top manipulations
 }//end update
 
 
@@ -341,12 +341,22 @@ y_entity_p.move_by=function(x,y,z,solid)
 
 	if(!this.div){return;}//if no div escape
 
-        this.div.style.left = this.x+"px";
-        this.div.style.top = this.y+"px";
-	this.div.style.zIndex =this.z;
+    this.div.style.left = this.x+"px";
+    this.div.style.top = this.y+"px";
+	this.div.style.zIndex = this.z;
 	
 }
 
+//set xyz cordenates
+y_entity_p.set_cor=function(x,y,z)
+{
+	if(!this.div){return;}//if no div escape
+
+    this.x = this.div.style.left ;
+    this.y = this.div.style.top ;
+	this.z = this.div.style.zIndex;
+
+}//end set_cor
 y_entity_p.set_pos=function(x,y,z)
 {
 	if(this.div)
@@ -556,17 +566,32 @@ y_entity_p.was_click = function()
 	return false;
 }
 
-y_entity_p.drag=function()
+y_entity_p.drag=function(parntw,parnth)
 {
+	id = this.id;
+	$(document.body).on("mousedown",{"id": id }, function (e) {
 	
-	if(this.is_clicked)
-	{
-		mx = y_input2_p.mouse_cor.x;
-		my = y_input2_p.mouse_cor.y;
-		this.x = mx;
-		this.y = my;
-		this.move_by(0,0,this.z);
-	}
+		if(e.target.id==e.data.id)
+		{
+			$dragging = $(e.target);
+		}
+	});
+    
+    $(document.body).on("mouseup", function (e) {
+        $dragging = false;
+    });
+
+	 $dragging = false;
+	 $(document.body).on("mousemove", function(e) {
+       
+		if(!$dragging ){return;}
+		if ($dragging) {
+            $dragging.offset({
+                top: e.pageY,
+                left: e.pageX
+            });
+        }
+    });
 }
 
 //example
@@ -656,8 +681,8 @@ y_entity_p.camera_move =function(dir,type)
 		if(e.type !=type && !e.no_cam){do_stuff=false}
 		if(dir == "up"){e.y += this.speed; this.world.cam.y +=this.speed;}
 		if(dir == "down"){e.y -= this.speed; this.world.cam.y -=this.speed;}
-		if(dir == "left"){e.x -= this.speed; this.world.cam.x -=this.speed;}
-		if(dir == "right"){e.x += this.speed; this.world.cam.x +=this.speed;}
+		if(dir == "left"){e.x += this.speed; this.world.cam.x -=this.speed;}
+		if(dir == "right"){e.x -= this.speed; this.world.cam.x +=this.speed;}
 		y_entity_p.move_by.call(e,0,0);//updatexy
 	}//end loop
 }//end camera_move
@@ -667,7 +692,7 @@ y_entity_p.responsive=function()
 	//width = $('#'+this.id).parent().parent().width();
 	width = $(window).width();
 	//width = 340;
-	ytrace(width+"screen");
+	//ytrace(width+"screen");
 	if(width<400)
 	{
 		this.width *=2.5;
@@ -1256,6 +1281,106 @@ y_animation_p.play = function(animation)
 }//end animate
 //////////////////end dom_animation/////////////
 
+ ////////  y_bar////////
+var y_bar = function(x,y,z,max_val,val)
+{ 
+	this.did_init = false;
+	this.type = 'y_bar'; 
+
+	y_entity.call(this,x,y,z,0,""); 
+	//the direction of the bar,right or down
+	this.dir="right";
+	//max value of this bar
+	this.max_value = 300;
+	//curent value
+	this.val = 150;
+	//max_width of dom element
+	this.max_width =200;
+	
+	//inner bar filler id
+	this.filler_id = "bar_filler_"+this.id;	
+
+	
+} 
+ 
+ y_bar.prototype= new y_entity(); 
+ 
+ var y_bar_p = y_bar.prototype; 
+ 
+ y_bar_p.init = function()
+{
+
+	if(!this.did_init)
+	{
+		//append bar filler div, give it this bars id
+		$("#"+this.id).append("<div id='"+this.filler_id+"' class='y_bar_filler'></div>");
+		
+		//init bar size
+		this.set_bar_size();
+		
+		//defult filler color
+		$("#"+this.filler_id).css("background","red");
+		//init filler size
+		this.update_filler();
+		
+		this.did_init = true;
+		return;
+	}//if did init escape 
+
+ }//end init 
+
+ y_bar_p.update = function()
+{
+	 this.init();
+	 y_entity_p.update.call(this); 
+	//test
+	// this.val -=0.1;
+	// this.update_filler();
+
+}//end update 
+y_bar_p.update_filler = function()
+{
+	var x = this.calc_filler_val();
+	if(this.dir == "right")
+	{
+		$("#"+this.filler_id).css({width:x,height:this.height});
+	}
+}//end update_filler
+
+y_bar_p.calc_filler_val = function()
+{
+	//7nt grade algebra
+	var x = this.val/this.max_value * this.max_width;
+	//make sure its not bigger then max width
+	if(x>this.max_width){x=this.max_width;}
+	//not below zero
+	if(x<0){x=0;}
+	return x;
+}//end calc_filler_val
+
+y_bar_p.set_bar_size = function()
+{
+	this.width = this.max_width;
+	this.height=20;
+
+	yw_h(this,this.width,this.height);
+}//end set_bar_size
+
+y_bar_p.change_color = function(bar,filler)
+{
+	$("#"+this.id).css("background",bar);
+	$("#"+this.filler_id).css("background",filler);
+}//end change_color
+
+//position bar relative to parent entity
+y_bar_p.parent_pos = function(parent_obj,x,y)
+{
+	this.x = parent_obj.x+x;
+	this.y = parent_obj.y+y;
+	y_entity_p.move_by.call(this,0,0);
+}
+ //////// end y_bar////////
+
 
 /////////math stuff///////////
 /*def yget_angle(x,y,x2,y2)
@@ -1338,7 +1463,7 @@ function ychange_img(t)
 function yw_h(t,w,h)
 {
 	y_entity_p.height.call(t,h); 
-	y_entity_p.width.call(t,h);
+	y_entity_p.width.call(t,w);
 }
 
 function ydist(t,x,y)
