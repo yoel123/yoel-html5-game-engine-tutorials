@@ -352,9 +352,9 @@ y_entity_p.set_cor=function(x,y,z)
 {
 	if(!this.div){return;}//if no div escape
 
-    this.x = this.div.style.left ;
-    this.y = this.div.style.top ;
-	this.z = this.div.style.zIndex;
+    this.x = parseInt(this.div.style.left);
+    this.y = parseInt(this.div.style.top);
+	this.z = parseInt(this.div.style.zIndex);
 
 }//end set_cor
 y_entity_p.set_pos=function(x,y,z)
