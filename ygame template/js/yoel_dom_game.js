@@ -1490,6 +1490,6 @@ if (!window.requestAnimationFrame)
     {
       window.setTimeout(callback, 1000 / framerate);
     };
-  })();
+  })(); 
 }
 
