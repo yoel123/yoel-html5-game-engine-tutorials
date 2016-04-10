@@ -4,7 +4,7 @@ the numbered html files are the tutorials chapters.open them using your browser.
 each chapter has a finished project folder with all the code used in the tut.
 the finished projects are also numbered the same as the html files.
 
-use "ygame template" folder to create your project simply copy it and edit index.html inside the folder.
+<b>use "ygame template" folder to create your project</b> simply copy it and edit index.html inside the folder.
 
 after that you can go to this tutorial to create a simple game with my engine:
 
